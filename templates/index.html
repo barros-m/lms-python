@@ -4,24 +4,51 @@
 <head>
     <title>LMS Project</title>
     <link rel="stylesheet" href="static/css/styles.css">
+    
 
 </head>
 
 <body>
-    <script type="text/javascript" src="../static/js/facebookScripts.js"></script>
-    <!--link to js functions-->
+    
+    <div class="bg-image"></div>
 
-    <div class="Title">
-        <h1>The LMS project </h1>
+    <div class="page">
+        <div class="container">
+
+          <div class="left">
+            <div class="login">LMS Course</div>
+            <div class="eula">Please log in with facebook account</div>
+            <input class = "facebook-input" type="button" onclick="logIn()" value="Continue with Facebook">
+          </div>
+
+
+          <div class="right">
+            <p class="right-p">If you currently don't have a facebook account. Please create one before requesting access to this course.</p>
+            <input class = "facebook-input" type="button" onclick="makeAccount()" value="Create Facebook account">
+            <h3 class="right-h3">Request access to this course</h3>
+            <input  href= "mailto:sergilu.94@gmail.com" class = "facebook-input" type="button" onclick="request()" value="Request course access">
+
+          </div>
+        </div>
     </div>
 
-    <div class="button-group">
-	    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <input type="button" onclick="makeAccount()" value="Create Facebook account">
-        <input type="button" onclick="logIn()" value="Log in with Facebook">
-        <!--logs in using facebook api -->
-        <input type="button" onclick="request()" value="Request course access">
-    </div>
+      <script src = "../static/js/facebookScripts.js"></script>
+
 </body>
 
 </html>
+
+
+
+<!-- 
+<script type="text/javascript" src="facebookScripts.js"></script>
+    link to js functions
+    
+    <div class="button-group">
+
+        <input type="button" onclick="makeAccount()" value="Create Facebook account">
+        <input type="button" onclick="logIn()" value="Log in with Facebook">
+        
+        <input type="button" onclick="request()" value="Request course access">
+
+    </div> -->
