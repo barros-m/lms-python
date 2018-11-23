@@ -1,0 +1,13 @@
+
+{% block content %}
+<h1> STUDENTS </h1>
+
+<table>
+	<tr><th>Student ID</th><th>Student Fname</th></tr>
+	{% for std in students %}
+	<tr><td>{{std[0]}}</td><td>{{std[1]}}</td></tr>
+	{% endfor %}
+</table>
+
+
+{% endblock %}

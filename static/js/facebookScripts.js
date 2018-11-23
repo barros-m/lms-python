@@ -51,9 +51,11 @@ window.fbAsyncInit = function () {
 
 
 function makeAccount() {
-    window.location.href = ("http://facebook.com");// redirect top facebook page to make account
+    //window.location.href = ("http://facebook.com");// redirect top facebook page to make account
+	window.location.href=("/login");
+
 }
 
 function request(){
-    console.log("No idea, how..."); 
+    window.location.href=("/send_request"); 
 }
