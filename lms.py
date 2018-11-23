@@ -49,6 +49,11 @@ def register():
         lname = request.form['lname']
         email = request.form['email']
         pword = request.form['password']
+        cpword = request.form['confirmPassword']
+
+        if pword != cpword:
+            error = "Passwords must match"
+            return render_template('register.html', fname=fname, lname=lname, email=email, error=error)
         if register_student(fname, lname, email, pword) == True:
             return "DONE. {} Added...\n".format(fname)
         else:

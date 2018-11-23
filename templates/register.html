@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% block content %}
 <html>
 	<head>
 
@@ -6,13 +7,16 @@
 
 	<body>
 		<form method="POST">
-			First Name: <input type="text" name="fname"><br>
-			Last Name: <input type="text" name="lname"><br>
-			Email: <input type="password" name="email"><br>
+			First Name: <input type="text" name="fname" value="{{fname}}"><br>
+			Last Name: <input type="text" name="lname" value="{{lname}}"><br>
+			Email: <input type="text" name="email" value="{{email}}"><br>
 			Password: <input type="password" name="password"><br>
+			Confirm Password: <input type="password" name="confirmPassword"><br>
 			<input type="submit" value="Submit">
 			
 		</form>
 		
 	</body>
 </html>
+
+{% endblock %}
