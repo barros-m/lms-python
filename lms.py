@@ -41,12 +41,37 @@ def send_request():
     return "Check your fiu email ({})...".format(email)
 
 # LOGIN - Still missing add to DB       
-@app.route('/login', methods=['POST', 'GET'])
-def login():
+@app.route('/register', methods=['POST', 'GET'])
+def register():
     print("hi")
     if request.method == 'POST':
-        return "DONE. But not added...\n"
-    return render_template('login.html')
+        fname = request.form['fname']
+        lname = request.form['lname']
+        email = request.form['email']
+        pword = request.form['password']
+        if register_student(fname, lname, email, pword) == True:
+            return "DONE. {} Added...\n".format(fname)
+        else:
+            return "COULD NOT ADD {}".format(fname)
+            
+    return render_template('register.html')
+
+def register_student(f, l, e, p):
+    sql = """
+        INSERT INTO Student(studentId, firstName, lastName, email, password, grade)
+        VALUES (nextval('student_sequence'), fname, lname, e, pword, 0);
+    """
+    conn = connectToDB()
+    cur = conn.cursor()
+    print("trying now...")
+    try:
+        cur.execute("INSERT INTO Student(studentId, firstName, lastName, email, password, grade) VALUES (nextval('student_sequence'), %s, %s, %s, %s, 0)", (f, l, e, p))
+        conn.commit()
+        print("EXECUTED")
+        return True    
+    except:
+        return False
+    
 
 
 @app.route('/admin')
@@ -60,6 +85,9 @@ def admin_page():
     except:
         print("ERROR executing query")
     results = cur.fetchall()
+    conn.commit()
+    cur.close()
+    conn.close()
     return render_template('admin.html', students=results)
         
 if __name__ == "__main__":
