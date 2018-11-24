@@ -2,20 +2,23 @@
 {% block content %}
 <html>
 	<head>
-
+		<title>LMS Register</title>
+		<link rel="stylesheet" href="static/css/stylesLogin.css">
 	</head>
 
 	<body>
-		<form method="POST">
-			First Name: <input type="text" name="fname" value="{{fname}}"><br>
-			Last Name: <input type="text" name="lname" value="{{lname}}"><br>
-			Email: <input type="text" name="email" value="{{email}}">{{eerror}}<br>
-			Password: <input type="password" name="password">{{perror}}<br>
-			Confirm Password: <input type="password" name="confirmPassword"><br>
-			<input type="submit" value="Submit">
-			
-		</form>
-		
+		<div class="login-page">
+			<div class="form">
+			<form method="POST">
+				<input type="text" name="fname" placeholder="First Name:"value="{{fname}}" required><br>
+				<input type="text" name="lname" placeholder="Last Name:" value="{{lname}}" required><br>
+				<input type="text" name="email" placeholder="Email:" value="{{email}}" required>{{eerror}}<br>
+				<input type="password" placeholder="Password:" name="password" required>{{perror}}<br>
+				<input type="password" placeholder="Confirm Password:" name="confirmPassword" required><br>
+				<input type="submit" value="Register">
+			</form>
+			</div>
+		</div>
 	</body>
 </html>
 

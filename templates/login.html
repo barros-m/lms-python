@@ -2,16 +2,21 @@
 {% block content %}
 <html>
 	<head>
-
+		<title>LMS Project</title>
+		<link rel="stylesheet" href="static/css/stylesLogin.css"
 	</head>
 
 	<body>
-		<form method="POST">
-			Email: <input type="text" name="email" value="{{email}}"><br>
-			Password: <input type="password" name="password">{{perror}}<br>
-			<input type="submit" value="Login">
-		</form>
-		
+		<div class="login-page">
+			<div class="form">
+			<form method="POST" class="login-form">
+				<input type="text" name="email" placeholder="Email:" value="{{email}}" required><br>
+				<input type="password" placeholder="Password:"name="password" required><br>{{perror}}<br>
+				<input type="submit" value="Login">
+				<p class="message"><a href="#">Create an account</a></p>
+			</form>
+			</div>
+		</div>
 	</body>
 </html>
 

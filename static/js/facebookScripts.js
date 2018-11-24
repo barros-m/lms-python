@@ -19,22 +19,7 @@
 var person = { userID: "", name: "", accessToken: "", picture: "", email: ""};
 
 function logIn() {
-    FB.login(function (response) {
-        if (response.status == "connected") {
-            person.userID = response.authResponse.userID;
-            person.accessToken = response.authResponse.accessToken;
-
-            FB.api('/me?fields=id,name,email,picture.type(large)', function (userData) {
-                person.name = userData.name;
-                person.email = userData.email;
-                person.picture = userData.picture.data.url;
-                console.log(person.name, ": haha : ", person.email);
-               
-            });
-            console.log("Redirecting...");
-            window.location.href = ("/course.html");
-        }
-    }, {scope: 'public_profile, email'})
+	window.location.href=("/login");
 }
 
 window.fbAsyncInit = function () {
@@ -50,9 +35,9 @@ window.fbAsyncInit = function () {
 };
 
 
-function makeAccount() {
+function register() {
     //window.location.href = ("http://facebook.com");// redirect top facebook page to make account
-	window.location.href=("/login");
+	window.location.href=("/register");
 
 }
 
