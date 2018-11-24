@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% block content %}
+<html>
+	<head>
+
+	</head>
+
+	<body>
+		<form method="POST">
+			Email: <input type="text" name="email" value="{{email}}"><br>
+			Password: <input type="password" name="password">{{perror}}<br>
+			<input type="submit" value="Login">
+		</form>
+		
+	</body>
+</html>
+
+{% endblock %}

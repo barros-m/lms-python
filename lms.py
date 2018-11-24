@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
@@ -14,9 +14,7 @@ mail = Mail(app)
 def connectToDB():
     # connection String
     conStr = "dbname=postgres user=postgres password=lms host=localhost"
-    print("************",conStr)
     try:
-        print("***** HELLO")
         return psycopg2.connect(conStr)
     except:
         print("Could not connect to DB")    
@@ -40,10 +38,45 @@ def send_request():
 
     return "Check your fiu email ({})...".format(email)
 
-# LOGIN - Still missing add to DB       
+# Login
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        conn = connectToDB()
+        cur = conn.cursor()
+
+        try:
+            sql = "SELECT s.studentId, r.status, s.password from Requests as r JOIN Student as s ON r.studentId = s.studentId where s.email='{}'".format(email)
+            cur.execute(sql)
+        except:
+            print("Could not run query")
+
+        results = cur.fetchone()
+        if results == None:
+            return "User not in the DB"
+    
+        if results[2] != password:
+            perror = "Wrong password"
+            return render_template('login.html', email=email, perror=perror)
+        # if status == 'a' (accepted)
+        if results[1] == 'a' :
+            session['logged_in'] = True
+            return render_template('content.html', user=results[0])
+        elif results[1] == 'p':
+            return  "Still pending professor's approval. Please contanct him."
+
+        cur.close()
+        conn.close()
+
+        
+    return render_template('login.html')
+
+# Register       
 @app.route('/register', methods=['POST', 'GET'])
 def register():
-    print("hi")
     if request.method == 'POST':
         fname = request.form['fname']
         lname = request.form['lname']
@@ -51,33 +84,37 @@ def register():
         pword = request.form['password']
         cpword = request.form['confirmPassword']
 
+        # incorrect password...
         if pword != cpword:
-            error = "Passwords must match"
-            return render_template('register.html', fname=fname, lname=lname, email=email, error=error)
+            perror = "Passwords must match"
+            return render_template('register.html', fname=fname, lname=lname, email=email, perror=perror)
+        if len(pword) < 3:
+            perror = "Password too small"
+            return render_template('register.html', fname=fname, lname=lname, email=email, perror=perror)
+
+        # incorrect email...
+        if '@' not in email or '.' not in email or len(email) < 5:
+            eerror = "Invalid email"
+            return render_template('register.html', fname=fname, lname=lname, eerror=eerror)
+
         if register_student(fname, lname, email, pword) == True:
             return "DONE. {} Added...\n".format(fname)
         else:
-            return "COULD NOT ADD {}".format(fname)
-            
+            #return "COULD NOT ADD {}".format(fname)
+            eerror = "Email already taken" # hopefully, only this error could be generated
+            return render_template('register.html', fname=fname, lname=lname, eerror=eerror)            
     return render_template('register.html')
 
 def register_student(f, l, e, p):
-    sql = """
-        INSERT INTO Student(studentId, firstName, lastName, email, password, grade)
-        VALUES (nextval('student_sequence'), fname, lname, e, pword, 0);
-    """
     conn = connectToDB()
     cur = conn.cursor()
-    print("trying now...")
     try:
         cur.execute("INSERT INTO Student(studentId, firstName, lastName, email, password, grade) VALUES (nextval('student_sequence'), %s, %s, %s, %s, 0)", (f, l, e, p))
         conn.commit()
-        print("EXECUTED")
         return True    
     except:
         return False
     
-
 
 @app.route('/admin')
 def admin_page():
