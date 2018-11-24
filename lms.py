@@ -116,22 +116,33 @@ def register_student(f, l, e, p):
         return False
     
 
-@app.route('/admin')
+#@app.route('/administrator')
 def admin_page():
-    print("ADMIN PAGE...")
-    conn = connectToDB()
-    cur = conn.cursor()
+    if request.method == 'POST':
+        conn = connectToDB()
+        cur = conn.cursor()
+    
+        try:
+            cur.execute("SELECT s.studentId, s.firstName, s.lastName, s.email from Requests as r JOIN Student as s ON r.studentId = s.studentId where r.status = 'p'")
+        except:
+            print("ERROR executing query")
+        results = cur.fetchall()
+        conn.commit()
+        cur.close()
+        conn.close()
+        return render_template('admin.html', pendingStudents=results)
 
-    try:
-        cur.execute("SELECT s.studentId, s.firstName, s.lastName, s.email from Requests as r JOIN Student as s ON r.studentId = s.studentId where r.status = 'p'")
-    except:
-        print("ERROR executing query")
-    results = cur.fetchall()
-    conn.commit()
-    cur.close()
-    conn.close()
-    return render_template('admin.html', pendingStudents=results)
-
+@app.route('/admin', methods=['POST', 'GET'])
+def admin_page_login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+    
+        if email == 'admin' and password == 'admin':
+            return admin_page()
+        return render_template('loginAdmin.html', perror="wrong email or password")
+    return render_template('loginAdmin.html')
+    
 @app.route('/authorize/<id>')
 def authorize(id):
     sql = "UPDATE requests SET status='a' WHERE studentId='{}'".format(id)

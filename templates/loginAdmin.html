@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% block content %}
+<html>
+	<head>
+		<title>LMS Administrator Page</title>
+		<link rel="stylesheet" href="static/css/stylesLogin.css"
+	</head>
+
+	<body>
+		<div class="login-page">
+			<div class="form">
+			<form method="POST" class="login-form">
+				<input type="text" name="email" placeholder="Email:" value="{{email}}" required><br>
+				<input type="password" placeholder="Password:"name="password" required><br>{{perror}}<br>
+				<input type="submit" value="Login">
+			</form>
+			</div>
+		</div>
+	</body>
+</html>
+
+{% endblock %}
