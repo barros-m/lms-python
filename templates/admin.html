@@ -5,7 +5,7 @@
 <table>
 	<tr><th>Student ID</th><th>Student Fname</th></tr>
 	{% for std in students %}
-	<tr><td>{{std[0]}}</td><td>{{std[1]}}</td></tr>
+	<tr><td>{{std[0]}}</td><td>{{std[1]}}</td><td><a href="{{ url_for('authorize', id=std[0])}}">Authorize student</a></td></tr>
 	{% endfor %}
 </table>
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
@@ -131,7 +131,22 @@ def admin_page():
     cur.close()
     conn.close()
     return render_template('admin.html', students=results)
-        
+
+@app.route('/authorize/<id>')
+def authorize(id):
+    sql = "UPDATE requests SET status='a' WHERE studentId='{}'".format(id)
+
+    conn = connectToDB()
+    cur = conn.cursor()
+    
+    cur.execute(sql)
+    conn.commit()
+
+    cur.close()
+    conn.close()
+    return redirect('/admin')       
+
+
 if __name__ == "__main__":
     # conn = connectToDB()
     app.run(host='0.0.0.0', port=80) # need ssl_context=
