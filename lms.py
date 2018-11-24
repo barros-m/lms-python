@@ -123,14 +123,14 @@ def admin_page():
     cur = conn.cursor()
 
     try:
-        cur.execute("SELECT s.studentId, s.firstName, s.lastName from Requests as r JOIN Student as s ON r.studentId = s.studentId where r.status = 'p'")
+        cur.execute("SELECT s.studentId, s.firstName, s.lastName, s.email from Requests as r JOIN Student as s ON r.studentId = s.studentId where r.status = 'p'")
     except:
         print("ERROR executing query")
     results = cur.fetchall()
     conn.commit()
     cur.close()
     conn.close()
-    return render_template('admin.html', students=results)
+    return render_template('admin.html', pendingStudents=results)
 
 @app.route('/authorize/<id>')
 def authorize(id):

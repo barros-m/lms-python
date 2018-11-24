@@ -1,13 +1,21 @@
 
 {% block content %}
-<h1> STUDENTS </h1>
 
-<table>
-	<tr><th>Student ID</th><th>Student Fname</th></tr>
-	{% for std in students %}
-	<tr><td>{{std[0]}}</td><td>{{std[1]}}</td><td><a href="{{ url_for('authorize', id=std[0])}}">Authorize student</a></td></tr>
-	{% endfor %}
-</table>
+<html>
+	<head>
+		<title>LMS Administrator</title>
+		<link rel="stylesheet" href="static/css/stylesTable.css">
+	</head>
 
+	<body>
+		<h1> PENDING STUDENTS </h1>
+		<table>
+			<tr><th>Student Name</th><th>Student Email</th><th>Accept/Decline</th></tr>
+			{% for std in pendingStudents %}
+			<tr><td>{{std[1] + " " + std[2]}}</td><td>{{std[3]}}</td><td><a href="{{ url_for('authorize', id=std[0])}}">Authorize student</a></td></tr>
+			{% endfor %}
+		</table>
+	</body>
+</html>
 
 {% endblock %}
