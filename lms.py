@@ -25,15 +25,27 @@ def homepage():
     return render_template('index.html')
 
 # SEND EMAIL
-@app.route('/send_request')
-def send_request():
+#@app.route('/send_request/<email>')
+def send_request(email):
     #if request.method == 'GET':
      #   return "REQUEST COULD NOT BE SENT"
 
-    email='mbarr241@fiu.edu'
-    msg = Message('Confirm Email', sender='matheusbarros1305@hotmail.com', recipients=[email])
+    msg = Message('Welcome to LMS', sender='matheusbarros1305@hotmail.com', recipients=[email])
 
-    msg.body = "I think we are good for now. Hopefully..."
+    msg.body = """
+        We are please to have you as a student.
+
+        First things first:
+            1. Enter in the website ( globo.com )
+            2. Pay it
+            3. Wait for the payment process (I usually takes 3 - 5 days)
+            4. Enjoy the course
+
+        If any question, please contact us in:
+            (123) 123-3456
+
+        See You. (:
+    """
     mail.send(msg)
 
     return "Check your fiu email ({})...".format(email)
@@ -98,7 +110,8 @@ def register():
             return render_template('register.html', fname=fname, lname=lname, eerror=eerror)
 
         if register_student(fname, lname, email, pword) == True:
-            return "DONE. {} Added...\n".format(fname)
+            send_request(email)
+            return "DONE. {} Added...\n\nPlease check your email\n".format(fname)
         else:
             #return "COULD NOT ADD {}".format(fname)
             eerror = "Email already taken" # hopefully, only this error could be generated
