@@ -75,7 +75,7 @@ def login():
             return render_template('login.html', email=email, perror=perror)
         # if status == 'a' (accepted)
         if results[1] == 'a' :
-            session['logged_in'] = True
+            #session['logged_in'] = True
             return render_template('content.html', user=results[0])
         elif results[1] == 'p':
             return  "Still pending professor's approval. Please contanct him."
