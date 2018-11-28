@@ -12,15 +12,85 @@
     
 </head>
 
-<body>
-    <div class="dropdown">
-        <button onclick="myFunction()" class="dropbtn">Lecture 1</button>
-            <div id="myDropdown" class="dropdown-content">
-                <a href="#home">Video</a>
-                <a href="#about">Power Point</a>
-                <a href="#contact">Documents</a>
+<body >
+
+    <h1 class= "centered">WELCOME TO FIU ONLINE</h1>
+    <p class="subtitle fancy"><span>Home of the panthers</span></p>
+    
+    <div class="container">
+            
+
+            <button class="collapsible">Open Lecture 1</button>
+            <div class="content">
+                    <a>Lecture video link</a>
+                    <a>Lecture Power Point </a>
+                    <a>Lecture pdf link</a>
             </div>
+        
+            <button class="collapsible">Open Lecture 2</button>
+                <div class="content">
+                    <a>Lecture video link</a>
+                    <a>Lecture Power Point </a>
+                    <a>Lecture pdf link</a>
+                </div>
+            
+            <button class="collapsible">Open Lecture 3</button>
+                <div class="content">
+                    <a>Lecture video link</a>
+                    <a>Lecture Power Point </a>
+                    <a>Lecture pdf link</a>
+                </div>
+
     </div>
+
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+        
+        for (i = 0; i < coll.length; i++) {
+          coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight){
+              content.style.maxHeight = null;
+            } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+            } 
+          });
+        }
+    </script>
+
+</body>
+</html>
+
+<!-- <div class="container">
+
+            <div class="dropdown">
+                    <button onclick="myFunction()" class="dropbtn">Lecture 1</button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <a href="#home">Video</a>
+                            <a href="#about">Power Point</a>
+                            <a href="#contact">Documents</a>
+                        </div>
+            </div>
+
+
+             <div class="dropdown">
+                    <button onclick="myFunction()" class="dropbtn">Lecture 1</button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <a href="#home">Video</a>
+                            <a href="#about">Power Point</a>
+                            <a href="#contact">Documents</a>
+                        </div>
+            </div>
+
+    </div>
+
+
+    
+
+
+    
     
 
     
@@ -47,6 +117,4 @@
             }
             </script>
 
-
-</body>
-</html>>
+             -->

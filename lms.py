@@ -36,7 +36,7 @@ def send_request(email):
         We are please to have you as a student.
 
         First things first:
-            1. Enter in the website ( globo.com )
+            1. Enter in the website ( http://rscphsw-pay.fiu.edu/product/hac2018-virtual/ )
             2. Pay it
             3. Wait for the payment process (I usually takes 3 - 5 days)
             4. Enjoy the course
