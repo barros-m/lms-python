@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, url_for
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
@@ -48,7 +48,7 @@ def send_request(email):
     """
     mail.send(msg)
 
-    return "Check your fiu email ({})...".format(email)
+    return "Check your email ({})...".format(email)
 
 # Login
 @app.route('/login', methods=['POST', 'GET'])
@@ -75,8 +75,8 @@ def login():
             return render_template('login.html', email=email, perror=perror)
         # if status == 'a' (accepted)
         if results[1] == 'a' :
-            #session['logged_in'] = True
-            return render_template('content.html', user=results[0])
+            return render_template('content.html')
+            
         elif results[1] == 'p':
             return  "Still pending professor's approval. Please contanct him."
 
@@ -85,6 +85,15 @@ def login():
 
         
     return render_template('login.html')
+
+
+@app.route('/content', methods=['POST', 'GET'])
+def content():
+    if request.method == 'POST':
+        return "GOOD" # The template is already being rendering by the login()
+    else:
+        return "<h1>You are not allowed to be here</h1><br><h3>Please do the login</h3>"
+
 
 # Register       
 @app.route('/register', methods=['POST', 'GET'])
@@ -110,10 +119,9 @@ def register():
             return render_template('register.html', fname=fname, lname=lname, eerror=eerror)
 
         if register_student(fname, lname, email, pword) == True:
-            send_request(email)
+            #send_request(email) # Please fix your email configuration beforing activating this function
             return "DONE. {} Added...\n\nPlease check your email\n".format(fname)
         else:
-            #return "COULD NOT ADD {}".format(fname)
             eerror = "Email already taken" # hopefully, only this error could be generated
             return render_template('register.html', fname=fname, lname=lname, eerror=eerror)            
     return render_template('register.html')
@@ -129,22 +137,23 @@ def register_student(f, l, e, p):
         return False
     
 
-#@app.route('/administrator')
 def admin_page():
-    if request.method == 'POST':
-        conn = connectToDB()
-        cur = conn.cursor()
-    
-        try:
-            cur.execute("SELECT s.studentId, s.firstName, s.lastName, s.email from Requests as r JOIN Student as s ON r.studentId = s.studentId where r.status = 'p'")
-        except:
-            print("ERROR executing query")
-        results = cur.fetchall()
-        conn.commit()
-        cur.close()
-        conn.close()
-        return render_template('admin.html', pendingStudents=results)
+    #if request.method == 'POST':
+    conn = connectToDB()
+    cur = conn.cursor()
 
+    try:
+        cur.execute("SELECT s.studentId, s.firstName, s.lastName, s.email from Requests as r JOIN Student as s ON r.studentId = s.studentId where r.status = 'p'")
+    except:
+        print("ERROR executing query")
+    results = cur.fetchall()
+    conn.commit()
+    cur.close()
+    conn.close()
+    return render_template('admin.html', pendingStudents=results)
+   # else:
+    #    return "Are you the adminstrator?"
+    
 @app.route('/admin', methods=['POST', 'GET'])
 def admin_page_login():
     if request.method == 'POST':
@@ -152,9 +161,12 @@ def admin_page_login():
         password = request.form['password']
     
         if email == 'admin' and password == 'admin':
+            #return admin_page()
             return admin_page()
-        return render_template('loginAdmin.html', perror="wrong email or password")
-    return render_template('loginAdmin.html')
+        else:
+            return render_template('loginAdmin.html', perror="wrong email or password")
+    else:
+        return render_template('loginAdmin.html')
     
 @app.route('/authorize/<id>')
 def authorize(id):
@@ -168,7 +180,7 @@ def authorize(id):
 
     cur.close()
     conn.close()
-    return redirect('/admin')       
+    return admin_page()
 
 
 if __name__ == "__main__":
