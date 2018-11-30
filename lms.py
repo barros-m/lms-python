@@ -5,7 +5,7 @@ import psycopg2
 # from flask_mysqldb import MySQL
 
 app = Flask(__name__)
-app.config.from_pyfile('config.cfg')
+#app.config.from_pyfile('config.cfg')
 
 
 mail = Mail(app)
@@ -30,7 +30,7 @@ def send_request(email):
     #if request.method == 'GET':
      #   return "REQUEST COULD NOT BE SENT"
 
-    msg = Message('Welcome to LMS', sender='matheusbarros1305@hotmail.com', recipients=[email])
+    msg = Message('Welcome to LMS', sender='noreply@noreply.com', recipients=[email])
 
     msg.body = """
         We are please to have you as a student.
