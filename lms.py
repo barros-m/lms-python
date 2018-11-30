@@ -68,7 +68,7 @@ def login():
 
         results = cur.fetchone()
         if results == None:
-            return "User not in the DB"
+            return render_template('login.html', perror="User not in the Database. Try to create an account.")
     
         if results[2] != password:
             perror = "Wrong password"
@@ -78,7 +78,8 @@ def login():
             return render_template('content.html')
             
         elif results[1] == 'p':
-            return  "Still pending professor's approval. Please contanct him."
+            return render_template('backToIndex1.html')
+            #return  "Still pending professor's approval. Please contanct him."
 
         cur.close()
         conn.close()
@@ -120,7 +121,7 @@ def register():
 
         if register_student(fname, lname, email, pword) == True:
             #send_request(email) # Please fix your email configuration beforing activating this function
-            return "DONE. {} Added...\n\nPlease check your email\n".format(fname)
+            return render_template('backToIndex.html', fname=fname, email=email)
         else:
             eerror = "Email already taken" # hopefully, only this error could be generated
             return render_template('register.html', fname=fname, lname=lname, eerror=eerror)            
@@ -150,7 +151,20 @@ def admin_page():
     conn.commit()
     cur.close()
     conn.close()
-    return render_template('admin.html', pendingStudents=results)
+
+    conn = connectToDB()
+    cur = conn.cursor()
+
+    try:
+        cur.execute("SELECT s.studentId, s.firstName, s.lastName, s.email from Requests as r JOIN Student as s ON r.studentId = s.studentId where r.status = 'a'")
+    except:
+        print("ERROR executing query")
+    registeredStudents = cur.fetchall()
+    conn.commit()
+    cur.close()
+    conn.close()
+    
+    return render_template('admin.html', pendingStudents=results, registeredStudents=registeredStudents)
    # else:
     #    return "Are you the adminstrator?"
     
@@ -182,20 +196,45 @@ def authorize(id):
     conn.close()
     return admin_page()
 
+@app.route('/remove/<id>')
+def remove(id):
+    sql = "UPDATE requests SET status='p' WHERE studentId='{}'".format(id)
+
+    conn = connectToDB()
+    cur = conn.cursor()
+    
+    cur.execute(sql)
+    conn.commit()
+
+    cur.close()
+    conn.close()
+    return admin_page()
+
+@app.route('/delete/<id>')
+def delete(id):
+    sql = "DELETE FROM requests WHERE studentId='{}'".format(id)
+
+    conn = connectToDB()
+    cur = conn.cursor()
+    
+    cur.execute(sql)
+    conn.commit()
+
+    cur.close()
+    conn.close()
+    sql = "DELETE from student WHERE studentId='{}'".format(id)
+
+    conn = connectToDB()
+    cur = conn.cursor()
+    
+    cur.execute(sql)
+    conn.commit()
+
+    cur.close()
+    conn.close()
+    return admin_page()
+
 
 if __name__ == "__main__":
     # conn = connectToDB()
-    app.run(host='0.0.0.0', port=80) # need ssl_context=
-
-    '''
-        cur = mysql.connection
-        app.run(host='0.0.0.0')
-    
-        app.config['MYSQL_HOST'] = 'localhost'
-        app.config['MYSQL_USER'] = 'matheus'
-        app.config['MYSQL_PASSWORD'] = 'jovem'
-        app.config['MYSQL_DB'] = 'unibooks'
-    '''
-        # cur = mysql.connection.cursor()
-    
-        # cur.execute(CREATE DATABASE book)
+    app.run(host='0.0.0.0', port=80) 

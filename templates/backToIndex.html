@@ -1,0 +1,22 @@
+<!DOCTYPE>
+
+{% block content %}
+<html>
+	<head>
+		<title>Thank you for registering!</title>
+		<link rel="stylesheet" type="text/css" href="../static/css/stylesLogin.css"/>	
+	</head>
+	<body>
+	<center>
+		<style>body{background: #B4CDCD;}</style>
+		<h1>{{fname}}, Thank you for registering</h1><br>
+		
+		<h3>Please open your email ({{email}}), and wait for the professor response. It usually takes 3 to 5 days</h3>
+		
+		<input class="facebook-input" type="button" onclick="logIn()" value="Back to login">
+		<script src="../static/js/facebookScripts.js"></script>
+	</center>
+	</body>	
+</html>
+
+{% endblock %}

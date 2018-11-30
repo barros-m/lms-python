@@ -33,11 +33,22 @@
 		</style>
 		<h1> PENDING STUDENTS </h1>
 		<table>
-			<tr><th>Student Name</th><th>Student Email</th><th>Accept/Decline</th></tr>
+			<tr><th>Student Name</th><th>Student Email</th><th>Authorize</th><th>Delete</th></tr>
 			{% for std in pendingStudents %}
-			<tr><td>{{std[1] + " " + std[2]}}</td><td>{{std[3]}}</td><td><a href="{{ url_for('authorize', id=std[0])}}">Authorize student</a></td></tr>
+			<tr><td>{{std[1] + " " + std[2]}}</td><td>{{std[3]}}</td><td><a href="{{ url_for('authorize', id=std[0])}}">Authorize student</a></td><td><a href="{{ url_for('delete', id=std[0])}}">Delete Student</a></td></tr>
 			{% endfor %}
 		</table>
+		<br>
+		<br>
+		<br>
+		<br>
+		<h1> REGISTERED STUDENTS </h1>
+			<table>
+				<tr><th>Student Name</th><th>Student Email</th><th>Unauthorize</th></tr>
+				{% for std in registeredStudents %}
+				<tr><td>{{std[1] + " " + std[2]}}</td><td>{{std[3]}}</td><td><a href="{{ url_for('remove', id=std[0])}}">Unauthorize student</a></td></tr>
+				{% endfor %}
+			</table>
 	</body>
 </html>
 
